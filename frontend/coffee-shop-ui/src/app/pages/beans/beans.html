@@ -1,0 +1,17 @@
+<h2>Coffee Beans</h2>
+
+<div *ngIf="loading">Loading...</div>
+
+<div class="grid" *ngIf="!loading">
+  <div class="card" *ngFor="let b of beans">
+    <div class="title">{{ b.name }}</div>
+    <div class="meta">{{ b.origin }} • {{ b.roast }}</div>
+    <div class="notes" *ngIf="b.tastingNotes">{{ b.tastingNotes }}</div>
+
+    <div class="price">{{ euros(b.priceCents) }}</div>
+    <div class="meta">{{ b.weightG }} g</div>
+
+    <button class="btn" (click)="cart.add({ kind: 'BEAN', id: b.id, name: b.name, priceCents: b.priceCents, imageUrl: (b.imageUrl ?? null) })">Add to cart</button>
+
+  </div>
+</div>

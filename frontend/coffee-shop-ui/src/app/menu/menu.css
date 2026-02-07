@@ -1,0 +1,148 @@
+.page-title {
+  margin: 0 0 14px;
+  font-size: 34px;
+}
+.loading {
+  padding: 18px 0;
+  color: #555;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .cart {
+    position: static;
+  }
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+.card {
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+.img {
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-placeholder {
+  color: #777;
+  font-size: 13px;
+}
+.card-body {
+  padding: 12px 12px 14px;
+}
+.name {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+.desc {
+  margin: 0 0 10px;
+  color: #555;
+  min-height: 40px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.price {
+  font-weight: 700;
+}
+.cart {
+  position: sticky;
+  top: 70px;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  background: #fff;
+  padding: 14px;
+}
+.cart-title {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #fafafa;
+}
+.item-name {
+  font-weight: 700;
+}
+.item-price {
+  color: #666;
+  font-size: 13px;
+}
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.qty-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+.qty-num {
+  min-width: 18px;
+  text-align: center;
+}
+.total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 6px;
+  border-top: 1px solid #eee;
+  margin-top: 4px;
+}
+.btn {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  padding: 10px 12px;
+  cursor: pointer;
+  width: 100%;
+}
+.btn.primary {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+.btn.ghost {
+  background: #f3f3f3;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.message {
+  padding: 10px;
+  border-radius: 12px;
+  background: #f7f7f7;
+  color: #222;
+}

@@ -1,0 +1,45 @@
+.panel {
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 10px;
+  max-width: 600px;
+}
+.form {
+  display: grid;
+  gap: 10px;
+}
+label {
+  display: grid;
+  gap: 6px;
+}
+input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+button {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+.danger {
+  border-color: #ffb3b3;
+}
+.list {
+  display: grid;
+  gap: 12px;
+  max-width: 700px;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #eee;
+  padding: 12px;
+  border-radius: 10px;
+}
+.muted {
+  color: #666;
+  font-size: 0.9rem;
+}

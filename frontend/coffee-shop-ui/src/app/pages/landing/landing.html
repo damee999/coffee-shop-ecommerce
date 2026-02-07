@@ -1,0 +1,149 @@
+<div class="landing-container">
+  <section class="hero hero--full">
+    <div class="hero-background">
+      <div class="hero-image-bg"></div>
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1 class="hero-title">Premium Coffee Delivered</h1>
+          <p class="hero-subtitle">
+            Discover the finest single-origin coffees from ethical growers worldwide
+          </p>
+          <div class="hero-buttons">
+            <button class="cta-button primary" routerLink="/catalog">Shop Now</button>
+            <button class="cta-button secondary" (click)="learnMore()">Learn More</button>
+          </div>
+        </div>
+
+        <div class="hero-image">
+    
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="recommended">
+    <h2>Recommended Products</h2>
+
+    <div *ngIf="loadingRecommended" class="loading-state">
+      <div class="coffee-loader">
+        <div class="coffee-cup">☕</div>
+        <p>Brewing our finest selections...</p>
+      </div>
+    </div>
+
+    <div *ngIf="recommendedError" class="error-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <p>{{ recommendedError }}</p>
+    </div>
+
+    <div class="products-grid" *ngIf="!loadingRecommended && recommendedProducts.length">
+      <div *ngFor="let product of recommendedProducts" class="product-card">
+        
+        <div *ngIf="product.isNew" class="product-badge new">NEW</div>
+        <div *ngIf="product.discount" class="product-badge discount">-{{ product.discount }}%</div>
+
+        <div class="product-image">
+          <div class="image-overlay">
+            <div class="quick-view" [routerLink]="['/product', product.id]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              Quick View
+            </div>
+          </div>
+          <img *ngIf="product.imageUrl" [src]="product.imageUrl" [alt]="product.name" />
+          <div *ngIf="!product.imageUrl" class="placeholder">
+            <div class="coffee-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-info">
+          <div class="product-meta">
+            <span class="product-category" [style.background]="getCategoryColor(product.category)">
+              {{ product.category }}
+            </span>
+            <div class="product-rating">
+              <span class="stars">
+                <span *ngFor="let star of [1,2,3,4,5]" class="star">★</span>
+              </span>
+              <span class="rating-count">({{ product.rating || 4.8 }})</span>
+            </div>
+          </div>
+
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-description">{{ product.description }}</p>
+
+          <div class="product-footer">
+            <div class="price-container">
+              <span class="current-price">${{ (product.priceCents / 100) | number:'1.2-2' }}</span>
+              <span *ngIf="product.originalPrice" class="original-price">
+                ${{ (product.originalPrice / 100) | number:'1.2-2' }}
+              </span>
+            </div>
+            <div class="product-actions">
+              <button class="add-to-cart-btn" (click)="addToCart(product)">
+                <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                Add to Cart
+              </button>
+              <button class="view-details-btn" [routerLink]="['/product', product.id]">
+                Details
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <h2>What Our Customers Say</h2>
+    <div class="testimonials-grid">
+      <div *ngFor="let testimonial of testimonials" class="testimonial-card">
+        <div class="stars">
+          <span *ngFor="let i of [1,2,3,4,5]" class="star">★</span>
+        </div>
+        <p class="testimonial-text">"{{ testimonial.text }}"</p>
+        <p class="testimonial-author">— {{ testimonial.name }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="newsletter">
+    <h2>Get Special Offers</h2>
+    <p>Subscribe to receive exclusive deals and new arrivals</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="Enter your email" />
+      <button class="subscribe-btn">Subscribe</button>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Ready For Your Next Cup?</h2>
+    <p>Join thousands of coffee enthusiasts enjoying premium global coffee</p>
+    <button class="cta-button-secondary" routerLink="/catalog">
+      Browse Our Catalog
+    </button>
+  </section>
+
+</div>

@@ -1,0 +1,183 @@
+<div class="catalog-container">
+    <br>
+  
+  <div *ngIf="cartMessage" class="message-alert" [class.success]="cartMessage.includes('added')" [class.error]="cartMessage.includes('Failed')">
+    <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path *ngIf="cartMessage.includes('added')" d="M20 6L9 17l-5-5"/>
+      <path *ngIf="cartMessage.includes('Failed') || cartMessage.includes('log in')" d="M12 8v4m0 4h.01"/>
+    </svg>
+    {{ cartMessage }}
+  </div>
+
+  <div class="catalog-content">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </svg>
+        <h3>Filters</h3>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-label">
+          <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <label>Search Products</label>
+        </div>
+        <div class="search-wrapper">
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (keyup)="onSearch()"
+            placeholder="What are you looking for?"
+            class="search-input"
+          />
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-label">
+          <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M6 12h12M10 18h8"/>
+          </svg>
+          <label>Sort By</label>
+        </div>
+        <div class="select-wrapper">
+          <select [(ngModel)]="sortBy" (change)="onSortChange()" class="filter-select">
+            <option value="name">Name (A-Z)</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+          </select>
+          <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+      </div>
+    </aside>
+
+    
+    <main class="products-section">
+      <div class="stats-bar">
+        <div class="stat">
+          <span class="stat-value">{{ filteredProducts.length }}</span>
+          <span class="stat-label">Products</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{ getPriceRange() }}</span>
+          <span class="stat-label">Price Range</span>
+        </div>
+        <div class="stat">
+          <button class="reset-filters" (click)="resetFilters()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+            Reset Filters
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="loading" class="loading-state">
+        <div class="coffee-loader">
+          <div class="coffee-cup">☕</div>
+          <p>Brewing our finest selections...</p>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="error-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <p>{{ error }}</p>
+        <button class="retry-btn" (click)="loadProducts()">Try Again</button>
+      </div>
+
+      <div *ngIf="!loading && filteredProducts.length === 0" class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <p>No products match your search</p>
+        <button class="reset-filters-btn" (click)="resetFilters()">Clear Filters</button>
+      </div>
+
+      
+      <div class="products-grid">
+        <div *ngFor="let product of filteredProducts" class="product-card">
+          
+          <div *ngIf="product.isNew" class="product-badge new">NEW</div>
+          <div *ngIf="product.discount" class="product-badge discount">-{{ product.discount }}%</div>
+
+          
+          <div class="product-image">
+            <div class="image-overlay">
+              <div class="quick-view" (click)="viewProductDetails(product.id)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                Quick View
+              </div>
+            </div>
+            <img *ngIf="product.imageUrl" [src]="product.imageUrl" [alt]="product.name" />
+            <div *ngIf="!product.imageUrl" class="placeholder">
+            <div class="coffee-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                <line x1="6" y1="1" x2="6" y2="4"></line>
+                <line x1="10" y1="1" x2="10" y2="4"></line>
+                <line x1="14" y1="1" x2="14" y2="4"></line>
+            </svg>
+            </div>
+            </div>
+          </div>
+
+          <div class="product-info">
+            <div class="product-meta">
+              <span class="product-category" [style.background]="getCategoryColor(product.category)">
+                {{ product.category }}
+              </span>
+              <div class="product-rating">
+                <span class="stars">
+                  <span *ngFor="let star of [1,2,3,4,5]" class="star">★</span>
+                </span>
+                <span class="rating-count">({{ product.rating || 4.8 }})</span>
+              </div>
+            </div>
+
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-description">{{ product.description | truncate:100 }}</p>
+
+            <div class="product-footer">
+              <div class="price-container">
+                <span class="current-price">${{ formatPrice(product.priceCents) }}</span>
+                <span *ngIf="product.originalPrice" class="original-price">
+                  ${{ formatPrice(product.originalPrice) }}
+                </span>
+              </div>
+              <div class="product-actions">
+                <button class="add-to-cart-btn" (click)="addToCart(product)">
+                  <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"/>
+                    <circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                  </svg>
+                  Add to Cart
+                </button>
+                <button class="view-details-btn" (click)="viewProductDetails(product.id)">
+                  Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

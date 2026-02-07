@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: coffee-shop-db
+    environment:
+      POSTGRES_DB: coffeeshop
+      POSTGRES_USER: coffeeshop
+      POSTGRES_PASSWORD: coffeeshop
+    ports:
+      - "5433:5432"
+    volumes:
+      - coffeeshop_pgdata:/var/lib/postgresql/data
+
+volumes:
+  coffeeshop_pgdata:

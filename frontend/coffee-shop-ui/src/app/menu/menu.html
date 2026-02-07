@@ -1,0 +1,29 @@
+<h1 class="page-title">☕ Coffee Shop Menu</h1>
+
+<div *ngIf="loading" class="loading">Loading menu...</div>
+
+<div *ngIf="!loading" class="layout">
+  <section class="products">
+    <div *ngIf="products.length === 0" class="empty">
+      No products available.
+    </div>
+
+    <div class="grid">
+      <article class="card" *ngFor="let p of products">
+        <div class="img" [style.backgroundImage]="p.imageUrl ? 'url(' + p.imageUrl + ')' : 'none'">
+          <div *ngIf="!p.imageUrl" class="img-placeholder">No image</div>
+        </div>
+
+        <div class="card-body">
+          <h3 class="name">{{ p.name }}</h3>
+          <p class="desc">{{ p.description }}</p>
+
+          <div class="row">
+            <div class="price">{{ (p.priceCents / 100) | number:'1.2-2' }} €</div>
+              <button class="btn" (click)="cart.add(asSellableProduct(p))">Add to cart</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

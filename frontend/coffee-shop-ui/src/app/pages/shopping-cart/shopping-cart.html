@@ -1,0 +1,79 @@
+<div class="cart-container">
+  <h1>Shopping Cart</h1>
+
+  <div *ngIf="loading" class="loading">
+    <p>Loading cart...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading" class="cart-content">
+    <div *ngIf="!cart || cart.items.length === 0" class="empty-cart">
+      <p>Your cart is empty</p>
+      <button class="continue-shopping" routerLink="/catalog">Continue Shopping</button>
+    </div>
+
+    <div *ngIf="cart && cart.items.length > 0" class="cart-layout">
+      <div class="cart-items">
+        <div *ngFor="let item of cart.items" class="cart-item">
+          <div class="item-image">
+            <img *ngIf="item.imageUrl" [src]="item.imageUrl" [alt]="item.productName" />
+            <div *ngIf="!item.imageUrl" class="placeholder">☕</div>
+          </div>
+
+          <div class="item-details">
+            <h3>{{ item.productName }}</h3>
+            <p class="price">${{ formatPrice(item.priceCents) }}</p>
+          </div>
+
+          <div class="item-quantity">
+            <button (click)="updateQuantity(item.id, item.quantity - 1)">−</button>
+            <input type="number" [(ngModel)]="item.quantity" (change)="updateQuantity(item.id, item.quantity)" />
+            <button (click)="updateQuantity(item.id, item.quantity + 1)">+</button>
+          </div>
+
+          <div class="item-total">
+            <p>${{ formatPrice(item.totalCents) }}</p>
+          </div>
+
+          <button class="remove-btn" (click)="removeItem(item.id)">🗑️</button>
+        </div>
+      </div>
+
+      
+      <aside class="cart-summary">
+        <h2>Order Summary</h2>
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span>${{ formatPrice(cart.totalCents) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping:</span>
+          <span>FREE</span>
+        </div>
+        <div class="summary-row">
+          <span>Tax:</span>
+          <span>$0.00</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span>${{ formatPrice(cart.totalCents) }}</span>
+        </div>
+
+        <button class="checkout-btn" (click)="proceedToCheckout()">
+          Proceed to Checkout
+        </button>
+
+        <button class="clear-cart-btn" (click)="clearCart()">
+          Clear Cart
+        </button>
+
+        <button class="continue-btn" routerLink="/catalog">
+          Continue Shopping
+        </button>
+      </aside>
+    </div>
+  </div>
+</div>

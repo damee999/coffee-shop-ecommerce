@@ -1,0 +1,116 @@
+<div class="product-details-container">
+  
+  <div *ngIf="loading" class="loading">
+    <h2>Loading product...</h2>
+  </div>
+
+  
+  <div *ngIf="error && !loading" class="error-message">
+    <h2>{{ error }}</h2>
+    <button class="back-btn" (click)="goBack()">Back to Products</button>
+  </div>
+
+  
+  <div *ngIf="product && !loading" class="details-wrapper">
+
+    <div class="breadcrumb">
+      <a (click)="goBack()" class="breadcrumb-link">Products</a>
+      <span> / {{ product.name }}</span>
+    </div>
+
+    <div class="product-grid">
+      
+      <div class="product-image-section">
+        <div class="product-image-container">
+          <img *ngIf="product.imageUrl" [src]="product.imageUrl" [alt]="product.name" class="product-img">
+          <div *ngIf="!product.imageUrl" class="coffee-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+              <line x1="6" y1="1" x2="6" y2="4"></line>
+              <line x1="10" y1="1" x2="10" y2="4"></line>
+              <line x1="14" y1="1" x2="14" y2="4"></line>
+            </svg>
+          </div>
+        </div>
+        <div class="product-meta">
+          <span class="badge">Premium</span>
+          <span class="rating">⭐ 4.8 (120+ reviews)</span>
+        </div>
+      </div>
+
+      <div class="product-info-section">
+        <h1 class="product-title">{{ product.name }}</h1>
+        
+        <div class="price-section">
+          <span class="price">{{ formatPrice(product.priceCents) }}</span>
+          <span class="stock-status" [ngClass]="{ 'in-stock': product.active !== false, 'out-of-stock': product.active === false }">
+            {{ product.active !== false ? '✓ In Stock' : '✗ Out of Stock' }}
+          </span>
+        </div>
+
+        <p class="description">{{ product.description || 'Premium quality coffee bean, carefully sourced and roasted to perfection.' }}</p>
+
+        <div class="cart-section">
+          <div class="quantity-selector">
+            <label>Quantity:</label>
+            <div class="quantity-control">
+              <button (click)="decreaseQuantity()" [disabled]="quantity <= 1" class="qty-btn">−</button>
+              <input type="number" [(ngModel)]="quantity" min="1" max="99" class="qty-input">
+              <button (click)="increaseQuantity()" [disabled]="quantity >= 99" class="qty-btn">+</button>
+            </div>
+          </div>
+
+          <button
+            class="add-to-cart-btn"
+            (click)="addToCart()"
+            [disabled]="addingToCart || product.active === false"
+            [ngClass]="{ loading: addingToCart }">
+            {{ addingToCart ? 'Adding...' : 'Add to Cart' }}
+          </button>
+        </div>
+
+        
+        <div *ngIf="cartMessage" class="cart-message" [ngClass]="{ success: cartMessage.includes('✓'), error: cartMessage.includes('Failed') }">
+          {{ cartMessage }}
+        </div>
+
+        
+        <div class="details-box">
+          <h3>Product Details</h3>
+          <ul>
+            <li><strong>Roast Level:</strong> <span>Medium Dark</span></li>
+            <li><strong>Origin:</strong> <span>South America (Colombia, Brazil)</span></li>
+            <li><strong>Flavor Notes:</strong> <span>Chocolate, Caramel, Nutty</span></li>
+            <li><strong>Best For:</strong> <span>Espresso, Americano, Lattes</span></li>
+            <li><strong>Available Sizes:</strong> <span>1lb, 2lb, 5lb bags</span></li>
+          </ul>
+        </div>
+
+        
+        <button (click)="goBack()" class="back-to-products"> Back to Products</button>
+      </div>
+    </div>
+
+    
+    <div *ngIf="relatedProducts.length > 0" class="related-section">
+      <h2>You Might Also Like</h2>
+      <div class="related-grid">
+        <div *ngFor="let relProduct of relatedProducts" class="related-card" (click)="goToProduct(relProduct.id)">
+          <div class="coffee-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+              <line x1="6" y1="1" x2="6" y2="4"></line>
+              <line x1="10" y1="1" x2="10" y2="4"></line>
+              <line x1="14" y1="1" x2="14" y2="4"></line>
+            </svg>
+          </div>
+          <h4>{{ relProduct.name }}</h4>
+          <p class="related-price">{{ formatPrice(relProduct.priceCents) }}</p>
+          <button class="view-btn">View Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
